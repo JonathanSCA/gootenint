@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Grace and Dwelling cross thumbnail</title>
+  <desc id="desc">A simple cross in the site's header blue.</desc>
+  <rect width="512" height="512" rx="88" fill="#f6f4f1"/>
+  <path
+    d="M230 88h52c12.2 0 22 9.8 22 22v106h98c12.2 0 22 9.8 22 22v48c0 12.2-9.8 22-22 22h-98v142c0 12.2-9.8 22-22 22h-52c-12.2 0-22-9.8-22-22V308h-98c-12.2 0-22-9.8-22-22v-48c0-12.2 9.8-22 22-22h98V110c0-12.2 9.8-22 22-22z"
+    fill="#162d57"
+  />
+</svg>

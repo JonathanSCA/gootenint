@@ -1,0 +1,65 @@
+import { spawn, execFileSync } from 'node:child_process';
+
+const commands = [
+  { name: 'api', command: 'npm run server' },
+  { name: 'vite', command: 'npm run dev' }
+];
+
+let shuttingDown = false;
+
+const children = commands.map(({ name, command }) => {
+  const child = spawnCommand(command, {
+    stdio: 'pipe',
+    env: process.env
+  });
+
+  child.stdout.on('data', (chunk) => {
+    process.stdout.write(`[${name}] ${chunk}`);
+  });
+
+  child.stderr.on('data', (chunk) => {
+    process.stderr.write(`[${name}] ${chunk}`);
+  });
+
+  child.on('exit', (code, signal) => {
+    if (shuttingDown) return;
+    console.error(`[${name}] exited with ${signal || code}`);
+    shutdown(code || 1);
+  });
+
+  return child;
+});
+
+function shutdown(code = 0) {
+  shuttingDown = true;
+  for (const child of children) {
+    stopProcessTree(child);
+  }
+  process.exit(code);
+}
+
+process.on('SIGINT', () => shutdown(0));
+process.on('SIGTERM', () => shutdown(0));
+
+function spawnCommand(command, options) {
+  if (process.platform === 'win32') {
+    return spawn(process.env.ComSpec || 'cmd.exe', ['/d', '/s', '/c', command], options);
+  }
+
+  return spawn('sh', ['-c', command], options);
+}
+
+function stopProcessTree(child) {
+  if (child.killed) return;
+
+  if (process.platform === 'win32') {
+    try {
+      execFileSync('taskkill.exe', ['/pid', String(child.pid), '/t', '/f'], { stdio: 'ignore' });
+      return;
+    } catch {
+      // Fall back to the normal signal path below.
+    }
+  }
+
+  child.kill();
+}

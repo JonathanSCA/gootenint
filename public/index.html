@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gooten PRP API Tester</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .api-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .api-section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .api-section p {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .response-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .response-section h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .url-display {
+            background: #fff;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            word-break: break-all;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #333;
+            border: 1px solid #e0e0e0;
+        }
+
+        .status-code {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            max-height: 500px;
+            overflow-y: auto;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Gooten PRP API Tester</h1>
+
+        <div class="api-section">
+            <h2>Get PRP Products</h2>
+            <p>Fetches all available PRP (Print Ready Products) from your Gooten catalog using Recipe ID.</p>
+            <div class="form-group">
+                <label for="prp-country">Country Code:</label>
+                <input type="text" id="prp-country" value="US" placeholder="US">
+            </div>
+            <div class="form-group">
+                <label for="prp-product-name">Product Name (optional):</label>
+                <input type="text" id="prp-product-name" placeholder="Leave empty for all products">
+            </div>
+            <button onclick="fetchPRPProducts()">Fetch PRP Products</button>
+            <div id="prp-response" class="response-section hidden">
+                <h3>Gooten API URL:</h3>
+                <div class="url-display" id="prp-gooten-url"></div>
+                <h3>Response:</h3>
+                <div id="prp-status"></div>
+                <pre id="prp-data"></pre>
+            </div>
+        </div>
+
+        <div class="api-section">
+            <h2>Get PRP Product Variants</h2>
+            <p>Fetches all variants for a specific PRP product by product name.</p>
+            <div class="form-group">
+                <label for="prp-variant-product-name">Product Name:</label>
+                <input type="text" id="prp-variant-product-name" placeholder="e.g., MyProduct">
+            </div>
+            <div class="form-group">
+                <label for="prp-variant-country">Country Code:</label>
+                <input type="text" id="prp-variant-country" value="US" placeholder="US">
+            </div>
+            <button onclick="fetchPRPVariants()">Fetch PRP Variants</button>
+            <div id="prp-variant-response" class="response-section hidden">
+                <h3>Gooten API URL:</h3>
+                <div class="url-display" id="prp-variant-gooten-url"></div>
+                <h3>Response:</h3>
+                <div id="prp-variant-status"></div>
+                <pre id="prp-variant-data"></pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3001/api';
+
+        async function fetchPRPProducts() {
+            const country = document.getElementById('prp-country').value;
+            const productName = document.getElementById('prp-product-name').value;
+            const responseDiv = document.getElementById('prp-response');
+            const gootenUrlDiv = document.getElementById('prp-gooten-url');
+            const statusDiv = document.getElementById('prp-status');
+            const dataDiv = document.getElementById('prp-data');
+
+            try {
+                let url = `${API_BASE}/prp-products?countryCode=${country}`;
+                if (productName) {
+                    url += `&productName=${encodeURIComponent(productName)}`;
+                }
+
+                responseDiv.classList.remove('hidden');
+                dataDiv.textContent = 'Loading...';
+                statusDiv.innerHTML = '';
+                gootenUrlDiv.textContent = 'Fetching...';
+
+                const response = await fetch(url);
+                const data = await response.json();
+
+                statusDiv.innerHTML = `<span class="status-code ${data.success ? 'status-success' : 'status-error'}">Status: ${data.statusCode}</span>`;
+                dataDiv.textContent = JSON.stringify(data, null, 2);
+                if (data.url) gootenUrlDiv.textContent = data.url;
+            } catch (error) {
+                statusDiv.innerHTML = '<span class="status-code status-error">Status: Network Error</span>';
+                dataDiv.textContent = JSON.stringify({ error: error.message }, null, 2);
+            }
+        }
+
+        async function fetchPRPVariants() {
+            const productName = document.getElementById('prp-variant-product-name').value;
+            const country = document.getElementById('prp-variant-country').value;
+            const responseDiv = document.getElementById('prp-variant-response');
+            const gootenUrlDiv = document.getElementById('prp-variant-gooten-url');
+            const statusDiv = document.getElementById('prp-variant-status');
+            const dataDiv = document.getElementById('prp-variant-data');
+
+            if (!productName) {
+                alert('Please enter a product name');
+                return;
+            }
+
+            try {
+                const url = `${API_BASE}/prp-variants?productName=${encodeURIComponent(productName)}&countryCode=${country}`;
+                responseDiv.classList.remove('hidden');
+                dataDiv.textContent = 'Loading...';
+                statusDiv.innerHTML = '';
+                gootenUrlDiv.textContent = 'Fetching...';
+
+                const response = await fetch(url);
+                const data = await response.json();
+
+                statusDiv.innerHTML = `<span class="status-code ${data.success ? 'status-success' : 'status-error'}">Status: ${data.statusCode}</span>`;
+                dataDiv.textContent = JSON.stringify(data, null, 2);
+                if (data.url) gootenUrlDiv.textContent = data.url;
+            } catch (error) {
+                statusDiv.innerHTML = '<span class="status-code status-error">Status: Network Error</span>';
+                dataDiv.textContent = JSON.stringify({ error: error.message }, null, 2);
+            }
+        }
+    </script>
+</body>
+</html>
