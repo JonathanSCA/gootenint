@@ -52,6 +52,20 @@ npm run dev
 
 The frontend runs on `http://localhost:5173`
 
+To run the frontend on port 80 for a public development tunnel or external test, use:
+
+```bash
+FRONTEND_PORT=80 npm run dev:full
+```
+
+On Windows PowerShell:
+
+```powershell
+$env:FRONTEND_PORT='80'; npm run dev:full
+```
+
+This keeps the API on `http://localhost:3001` and starts Vite on `http://localhost`. Port 80 may require elevated permissions on some machines.
+
 ### 3. Sync Products from Gooten
 
 1. Open your browser to `http://localhost:5173`
@@ -241,6 +255,7 @@ This project is ready for a Git-linked Railway deployment.
 5. Generate a Railway domain from the service settings after the first successful deploy.
 
 The Express server serves API routes, files in `public`, and the built Vite app from `dist`.
+For Railway production, keep the start command as `npm start`. Do not use `npm run dev`, `npm run dev:public`, or `npm run dev:full` for the deployed service.
 
 ### Environment Variables Required
 

@@ -1,16 +1,23 @@
 import { spawn, execFileSync } from 'node:child_process';
 
+const frontendCommand = process.env.FRONTEND_PORT === '80'
+  ? 'npm run dev:public'
+  : 'npm run dev';
+
 const commands = [
-  { name: 'api', command: 'npm run server' },
-  { name: 'vite', command: 'npm run dev' }
+  { name: 'api', command: 'npm run server', env: { PORT: process.env.API_PORT || '3001' } },
+  { name: 'vite', command: frontendCommand }
 ];
 
 let shuttingDown = false;
 
-const children = commands.map(({ name, command }) => {
+const children = commands.map(({ name, command, env }) => {
   const child = spawnCommand(command, {
     stdio: 'pipe',
-    env: process.env
+    env: {
+      ...process.env,
+      ...env
+    }
   });
 
   child.stdout.on('data', (chunk) => {
