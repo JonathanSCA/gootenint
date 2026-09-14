@@ -248,9 +248,15 @@ The Express server serves API routes, files in `public`, and the built Vite app 
 GOOTEN_RECIPE_ID=your-recipe-id
 VITE_SUPABASE_URL=your-supabase-url
 VITE_SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_URL=your-supabase-url
+SUPABASE_KEY=your-anon-key
+SUPABASE_ANON_KEY=your-anon-key
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 DEV_AUTO_CONFIRM_USERS=false
 ```
+
+`VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are required for the frontend build.
+`SUPABASE_URL`, `SUPABASE_KEY`, and `SUPABASE_ANON_KEY` are backend aliases, but setting both the `VITE_` pair and `SUPABASE_URL`/`SUPABASE_KEY` in Railway makes the deployment more explicit.
 
 ### Build Commands
 

@@ -22,8 +22,8 @@ const GOOTEN_RECIPE_ID = process.env.GOOTEN_RECIPE_ID;
 const GOOTEN_BASE_URL = 'https://api.print.io';
 const GOOTEN_PRP_PRODUCTS_PATH = '/api/v/1/source/api/preconfiguredproducts/';
 const GOOTEN_PRP_VARIANTS_PATH = '/api/v/1/source/api/preconfiguredproducts/variants/';
-const SUPABASE_URL = process.env.VITE_SUPABASE_URL;
-const SUPABASE_ANON_KEY = process.env.VITE_SUPABASE_ANON_KEY;
+const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+const SUPABASE_ANON_KEY = process.env.SUPABASE_KEY || process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const DEV_AUTO_CONFIRM_USERS = process.env.DEV_AUTO_CONFIRM_USERS === 'true';
 
