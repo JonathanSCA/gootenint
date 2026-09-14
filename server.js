@@ -2624,7 +2624,7 @@ app.use((err, req, res, next) => {
   return next(err);
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Gooten API Server running on http://localhost:${PORT}`);
   console.log(`Recipe ID configured: ${GOOTEN_RECIPE_ID ? 'Yes' : 'No (Please add to .env)'}`);
   console.log(`Supabase caching: Enabled`);
